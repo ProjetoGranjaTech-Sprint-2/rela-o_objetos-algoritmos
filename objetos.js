@@ -31,7 +31,7 @@ var notebook = {
                 if (i == tempo) {
                     setTimeout(function () {
                         console.log(i);
-                        console.log("Você está ligando o notebook !");
+                        console.log("Seu notebook foi ligado !");
                     }, i * 1000);
                     break;
                 }
@@ -48,7 +48,7 @@ var notebook = {
     },
     desligar: function () {
         if (this.status == true) {
-            console.log("Você está desligando o notebook !")
+            console.log("Seu notebook foi desligado !")
             this.status = false;
         } else {
             console.log("Seu notebook já está desligado !");
