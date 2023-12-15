@@ -1,11 +1,11 @@
 
-var aplicativosInstalados = [];
-var aplicativosAbertos = [];
-var nomeAplicativo;
-var temAplicativo = false;
-var aplicativoAberto = false;
+let aplicativosInstalados = [];
+let aplicativosAbertos = [];
+let nomeAplicativo;
+let temAplicativo = false;
+let aplicativoAberto = false;
 
-var notebook = {
+const notebook = {
     marca: "Samsung",
     modelo: "SamsungBook",
     processador: "i5-1135G7",
@@ -15,7 +15,7 @@ var notebook = {
     status: false,
     ligar: function () {
         if (this.status == false) {
-            var tempo = 0;
+            let tempo = 0;
 
             if (this.armazenamentoMB > 192000 && this.armazenamentoMB <= 256000) {
                 tempo = 3;
@@ -210,7 +210,7 @@ var notebook = {
     }
 }
 
-var aplicativos = {
+const aplicativos = {
     musica: {
         nome: "Spotify",
         consumoMBPorArmazenamento: 1000,
