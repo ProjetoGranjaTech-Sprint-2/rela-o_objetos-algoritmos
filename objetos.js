@@ -1,10 +1,3 @@
-
-let aplicativosInstalados = [];
-let aplicativosAbertos = [];
-let nomeAplicativo;
-let temAplicativo = false;
-let aplicativoAberto = false;
-
 const notebook = {
     marca: "Samsung",
     modelo: "SamsungBook",
@@ -12,9 +5,14 @@ const notebook = {
     ramMB: 16000,
     armazenamentoMB: 256000,
     so: "Windows 11",
-    status: false,
+    aplicativosInstalados: [],
+    aplicativosAbertos: [],
+    nomeAplicativo: "",
+    temAplicativo: false,
+    aplicativoAberto: false,
+    ligado: false,
     ligar: function () {
-        if (this.status == false) {
+        if (this.ligado == false) {
             let tempo = 0;
 
             if (this.armazenamentoMB > 192000 && this.armazenamentoMB <= 256000) {
@@ -42,120 +40,120 @@ const notebook = {
                 }, i * 1000);
             }
 
-            this.status = true;
+            this.ligado = true;
 
         } else {
             console.log("Seu notebook já está ligado !");
         }
     },
     desligar: function () {
-        if (this.status == true) {
+        if (this.ligado == true) {
             console.log("Seu notebook foi desligado !")
-            this.status = false;
+            this.ligado = false;
         } else {
             console.log("Seu notebook já está desligado !");
         }
     },
-    instalarAplicativo: function instalar(x) {
-        nomeAplicativo = x.nome;
+    instalarAplicativo: function instalar(aplicativo) {
+        this.nomeAplicativo = aplicativo.nome;
 
-        if (this.status == false) {
-            console.log(`Você não pode instalar o ${nomeAplicativo} com o notebook desligado !`)
+        if (this.ligado == false) {
+            console.log(`Você não pode instalar o ${this.nomeAplicativo} com o notebook desligado !`)
         } else {
 
-            for (let i = 0; i < aplicativosInstalados.length; i++) {
-                if (aplicativosInstalados[i] == nomeAplicativo) {
-                    console.log(`Você já tem o ${nomeAplicativo} instalado !`);
+            for (let i = 0; i < this.aplicativosInstalados.length; i++) {
+                if (this.aplicativoInstalados[i] == this.nomeAplicativo) {
+                    console.log(`Você já tem o ${this.nomeAplicativo} instalado !`);
                     return;
                 }
             }
 
-            if (this.armazenamentoMB < x.consumoMBPorArmazenamento) {
-                console.log(`Você não tem armazenamento o suficiente para instalar ${nomeAplicativo}`)
+            if (this.armazenamentoMB < aplicativo.consumoMBPorArmazenamento) {
+                console.log(`Você não tem armazenamento o suficiente para instalar ${this.nomeAplicativo}`)
             } else {
-                this.armazenamentoMB -= x.consumoMBPorArmazenamento;
-                console.log(`Você instalou ${nomeAplicativo} !`);
-                aplicativosInstalados.push(nomeAplicativo);
+                this.armazenamentoMB -= aplicativo.consumoMBPorArmazenamento;
+                console.log(`Você instalou ${this.nomeAplicativo} !`);
+                this.aplicativosInstalados.push(this.nomeAplicativo);
             }
         }
     },
-    abrirAplicativo: function abrir(y) {
-        nomeAplicativo = y.nome;
-        temAplicativo = false;
-        aplicativoAberto = false;
+    abrirAplicativo: function abrir(aplicativo) {
+        this.nomeAplicativo = aplicativo.nome;
+        this.temAplicativo = false;
+        this.aplicativoAberto = false;
 
-        if (this.status == false) {
-            console.log(`Você não pode abrir ${nomeAplicativo} com o notebook desligado !`);
+        if (this.ligado == false) {
+            console.log(`Você não pode abrir ${this.nomeAplicativo} com o notebook desligado !`);
         } else {
 
-            for (let i = 0; i < aplicativosInstalados.length; i++) {
-                if (aplicativosInstalados[i] == nomeAplicativo) {
-                    temAplicativo = true;
+            for (let i = 0; i < this.aplicativosInstalados.length; i++) {
+                if (this.aplicativosInstalados[i] == this.nomeAplicativo) {
+                    this.temAplicativo = true;
                     break;
                 }
             }
 
-            if (temAplicativo == false) {
-                console.log(`Você não não pode abrir ${nomeAplicativo} pois ele não está instalado !`);
+            if (this.temAplicativo == false) {
+                console.log(`Você não não pode abrir ${this.nomeAplicativo} pois ele não está instalado !`);
             } else {
 
-                for (let i = 0; i < aplicativosAbertos.length; i++) {
-                    if (aplicativosAbertos[i] == nomeAplicativo) {
-                        aplicativoAberto = true;
+                for (let i = 0; i < this.aplicativosAbertos.length; i++) {
+                    if (this.aplicativosAbertos[i] == this.nomeAplicativo) {
+                        this.aplicativoAberto = true;
                         break;
                     }
                 }
 
-                if (aplicativoAberto == true) {
-                    console.log(`Você não pode abrir ${nomeAplicativo} pois ele já está aberto !`);
+                if (this.aplicativoAberto == true) {
+                    console.log(`Você não pode abrir ${this.nomeAplicativo} pois ele já está aberto !`);
                 } else {
-                    if (this.ramMB < y.consumoMBAberto) {
-                        console.log(`Você não pode abrir ${nomeAplicativo} pois excede o valor ${notebook.ramMB}MB que é sua memória disponível atualmente !`);
+                    if (this.ramMB < aplicativo.consumoMBAberto) {
+                        console.log(`Você não pode abrir ${this.nomeAplicativo} pois excede o valor ${notebook.ramMB}MB que é sua memória disponível atualmente !`);
                     } else {
-                        console.log(`Você abriu ${nomeAplicativo} !`);
-                        this.ramMB -= y.consumoMBAberto;
-                        aplicativosAbertos.push(nomeAplicativo);
+                        console.log(`Você abriu ${this.nomeAplicativo} !`);
+                        this.ramMB -= aplicativo.consumoMBAberto;
+                        this.aplicativosAbertos.push(this.nomeAplicativo);
                     }
                 }
             }
         }
     },
-    desinstalarAplicativo: function desinstalar(z) {
-        nomeAplicativo = z.nome;
-        temAplicativo = false;
-        aplicativoAberto = false;
+    desinstalarAplicativo: function desinstalar(aplicativo) {
+        this.nomeAplicativo = aplicativo.nome;
+        this.temAplicativo = false;
+        this.aplicativoAberto = false;
 
-        if (this.status == false) {
-            console.log(`Você não pode desinstalar o ${nomeAplicativo} com o notebook desligado !`)
+        if (this.ligado == false) {
+            console.log(`Você não pode desinstalar o ${this.nomeAplicativo} com o notebook desligado !`)
         } else {
 
-            for (let i = 0; i < aplicativosInstalados.length; i++) {
-                if (aplicativosInstalados[i] == nomeAplicativo) {
-                    temAplicativo = true;
+            for (let i = 0; i < this.aplicativosInstalados.length; i++) {
+                if (this.aplicativosInstalados[i] == this.nomeAplicativo) {
+                    this.temAplicativo = true;
                     break;
                 }
             }
 
-            if (temAplicativo == false) {
-                console.log(`Você não pode desinstalar ${nomeAplicativo} pois ele não está instalado !`);
+            if (this.temAplicativo == false) {
+                console.log(`Você não pode desinstalar ${this.nomeAplicativo} pois ele não está instalado !`);
             } else {
 
-                for (let i = 0; i < aplicativosAbertos.length; i++) {
-                    if (aplicativosAbertos[i] == nomeAplicativo) {
-                        aplicativoAberto = true;
+                for (let i = 0; i < this.aplicativosAbertos.length; i++) {
+                    if (this.aplicativosAbertos[i] == this.nomeAplicativo) {
+                        this.aplicativoAberto = true;
                         break;
                     }
                 }
 
-                if (aplicativoAberto == true) {
-                    console.log(`Você não pode desinstalar ${nomeAplicativo} pois ele está aberto !`);
+                if (this.aplicativoAberto == true) {
+                    console.log(`Você não pode desinstalar ${this.nomeAplicativo} pois ele está aberto !`);
                 } else {
-                    this.armazenamentoMB += z.consumoMBPorArmazenamento;
-                    console.log(`Você desinstalou ${nomeAplicativo} !`);
+                    this.armazenamentoMB += aplicativo.consumoMBPorArmazenamento;
+                    console.log(`Você desinstalou ${this.nomeAplicativo} !`);
 
-                    for (let i = 0; i < aplicativosInstalados.length; i++) {
-                        if (aplicativosInstalados[i] == nomeAplicativo) {
-                            aplicativosInstalados.splice(i);
+                    for (let i = 0; i < this.aplicativosInstalados.length; i++) {
+                        if (this.aplicativosInstalados[i] == this.nomeAplicativo) {
+                            this.aplicativosInstalados.splice(i);
                             break;
                         }
                     }
@@ -164,42 +162,42 @@ const notebook = {
             }
         }
     },
-    fecharAplicativo: function (a) {
-        nomeAplicativo = a.nome;
-        temAplicativo = false;
-        aplicativoAberto = false;
+    fecharAplicativo: function (aplicativo) {
+        this.nomeAplicativo = aplicativo.nome;
+        this.temAplicativo = false;
+        this.aplicativoAberto = false;
 
-        if (this.status == false) {
-            console.log(`Você não pode fechar ${nomeAplicativo} com o notebook desligado !`);
+        if (this.ligado == false) {
+            console.log(`Você não pode fechar ${this.nomeAplicativo} com o notebook desligado !`);
         } else {
 
-            for (let i = 0; i < aplicativosInstalados.length; i++) {
-                if (aplicativosInstalados[i] == nomeAplicativo) {
-                    temAplicativo = true;
+            for (let i = 0; i < this.aplicativosInstalados.length; i++) {
+                if (this.aplicativosInstalados[i] == this.nomeAplicativo) {
+                    this.temAplicativo = true;
                     break;
                 }
             }
 
-            if (temAplicativo == false) {
-                console.log(`Você não pode fechar ${nomeAplicativo} pois ele não está instalado !`);
+            if (this.temAplicativo == false) {
+                console.log(`Você não pode fechar ${this.nomeAplicativo} pois ele não está instalado !`);
             } else {
 
-                for (let i = 0; i < aplicativosAbertos.length; i++) {
-                    if (aplicativosAbertos[i] == nomeAplicativo) {
-                        aplicativoAberto = true;
+                for (let i = 0; i < this.aplicativosAbertos.length; i++) {
+                    if (this.aplicativosAbertos[i] == this.nomeAplicativo) {
+                        this.aplicativoAberto = true;
                         break;
                     }
                 }
 
-                if (aplicativoAberto == false) {
-                    console.log(`Você não pode fechar ${nomeAplicativo} pois ele já está fechado !`);
+                if (this.aplicativoAberto == false) {
+                    console.log(`Você não pode fechar ${this.nomeAplicativo} pois ele já está fechado !`);
                 } else {
-                    this.ramMB += a.consumoMBAberto;
-                    console.log(`Você fechou ${nomeAplicativo} !`);
+                    this.ramMB += aplicativo.consumoMBAberto;
+                    console.log(`Você fechou ${this.nomeAplicativo} !`);
 
-                    for (let i = 0; i < aplicativosAbertos.length; i++) {
-                        if (aplicativosAbertos[i] == nomeAplicativo) {
-                            aplicativosAbertos.splice(i);
+                    for (let i = 0; i < this.aplicativosAbertos.length; i++) {
+                        if (this.aplicativosAbertos[i] == this.nomeAplicativo) {
+                            this.aplicativosAbertos.splice(i);
                             break;
                         }
                     }
